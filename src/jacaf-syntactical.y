@@ -1,9 +1,11 @@
 %{
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+extern int yylineno;
 extern int yylex(void);
 extern char *yytext;
-yyerror (char *s);
+extern FILE *yyin;
+void yyerror(char *s);
 %}
 
 /* Declaraciones de BISON %token tipo*/
@@ -32,13 +34,7 @@ yyerror (char *s);
 %token tk_double
 %token tk_string
 %token tk_boolean
-%token tk_greater_than
-%token tk_minor_than
-%token tk_compare
-%token tk_different
-%token tk_and
-%token tk_or
-%token tk_not
+%token tk_logic_op
 %token tk_plus_op
 %token tk_rest_op
 %token tk_true
@@ -48,58 +44,123 @@ yyerror (char *s);
 %token tk_str_1
 %token tk_str_2
 %token tk_comment
+%start program
 
-
+/* TODO: Add SWITCH CASE */
 %%
-/* Grammar */
 
-GROUP: /*  Empty string  */
-| DECLARE GROUP
-;
-
-/* Variable declaration */
-DECLARE : tk_var V_LIST ';' {printf("=> Correct variable declaration\n");}
-        | error ';' { yyerrok;}
+program : class '{' declaration_group instruction_group '}' { printf("=> Correct program syntax\n"); }
         ;
-V_LIST    : id ':' V_TYPE
-        | V_LIST ',' id ':' V_TYPE
-V_TYPE    : tk_integer
-        | tk_double
-        | tk_string
-        | tk_boolean
+class   : access tk_class id 
         ;
-
-/* Method declaration */
-DECLARE : ACCESS tk_method id '(' M_LIST ')' ':' M_TYPE '{' '}' {printf("=> Correct method declaration\n");}
-        | error '}' { yyerrok;}
+declaration_group : /* Empty */
+        | declaration declaration_group
+        | declaration error ';' {yyerrok;}
         ;
-ACCESS  : tk_public
+declaration : var_declaration
+        | method_declaration
+        ;
+var_declaration : tk_var id_list ';'
+        | tk_var id_type '=' expression ';'
+        ;
+method_declaration : access tk_method id '(' param_list ')' ':' method_type '{' declaration_group instruction_group '}'
+        ;
+access  : /* Empty */
+        | tk_public
         | tk_private
-        | 
         ;
-M_LIST  : id ':' M_TYPE
-        | M_LIST ',' id ':' M_TYPE
-        |
+param_list : 
+        | id_list
         ;
-M_TYPE  : tk_integer
+id_list : id_type 
+        | id_list ',' id_type
+        ;
+id_type : id ':' var_type 
+        ;
+instruction_group : /* Empty */
+        | instruction instruction_group
+        | instruction error ';' {yyerrok;}
+        ;
+instruction : assignment_instruction
+        | comparison_instruction
+        | loop_instruction
+        | output_instruction
+        | return_instruction
+        | plus_rest_instruction
+        ;
+assignment_instruction : id '=' expression ';'
+        ;
+comparison_instruction : if_statement
+        | if_statement tk_else '{' instruction_group '}'
+        ;
+if_statement : tk_if '(' expression ')' '{' instruction_group '}'
+        ;
+loop_instruction : while_statement '{' instruction_group '}'
+        | tk_do '{' instruction_group '}' while_statement ';'
+        | tk_for '(' for_var_declaration ';' expression ';' plus_rest_instruction ')' '{' instruction_group '}'
+        ;
+while_statement : tk_while '(' expression ')'
+        ;
+for_var_declaration : tk_var id ':' tk_integer '=' tk_int_val
+        ;
+output_instruction : tk_print '(' expression ')' ';'
+        ;
+return_instruction : tk_return expression ';'
+        ;
+plus_rest_instruction : id pr_assignment tk_int_val
+        ;
+pr_assignment : tk_plus_op
+        | tk_rest_op
+        ;
+var_type : tk_string
+        | tk_integer
         | tk_double
-        | tk_string
         | tk_boolean
+        ;
+method_type : var_type
         | tk_void
         ;
-
+expression : factor
+        | '-' expression
+        | factor '+' expression
+        | factor '-' expression
+        ;    
+factor  : term
+        | factor '*' term
+        | factor '/' term
+        ;
+term    : id
+        | id '(' arg_list ')'
+        | tk_true
+        | tk_false
+        | tk_int_val
+        | tk_real_val
+        | tk_str_1
+        | tk_str_2
+        | '(' expression ')'
+        | compare
+        ;
+arg_list : 
+        | id
+        | arg_list ',' id
+        ;
+compare : expression tk_logic_op expression
+        ;
 
 %%
-/* Funciones que necesitan el analizador sintáctico*/
+
 int main() {
-  printf("Enter declarations \n");
+  printf("[START]: JACAF Syntax code analysis \n\n");
+  yyin = fopen("../test/example.jacaf", "r");
+  if (!yyin) { printf("Something went wrong reading the file."); }
   yyparse();
-  printf("Type a keyword to end the process...");
-  getchar();
+  printf("[Analyzed lines (%d)]\n\n", yylineno);
+  printf("[END]: JACAF Syntax code analysis \n");
+  return 0;
 }
 
-yyerror (char *s) {
-  printf("%s, in: %s \n", s, yytext);
+void yyerror(char *s) {
+  printf("[Syntactical error: '%s', in line: (%d) ]\n",yytext, yylineno);
 }
 
 int yywrap() {

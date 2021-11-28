@@ -1,25 +1,23 @@
 %option noyywrap
 %option yylineno
-/* Analizador para el lenguaje JACAF */
+/* JACAF */
 
 %{
-/* Math se requiere para las conversiones */
-#include <math.h>
 #include "jacaf-syntactical.tab.h"
 #include <stdlib.h>
 #include <stdio.h>
-int errorCount = 0;
+#include <math.h>
 %}
 
 DIGIT         [0-9]
 UNDERSCORE    [_]
 CHARACTER     [a-zA-Z]
 ID            ([_]|[a-zA-Z])+([_]|[a-zA-Z]|[0-9])*
-STRING1       (\")([^\"\n]*)(\")
-STRING2       \`[^\`]*(\$\{)([_]|[a-zA-Z])+([_]|[a-zA-Z]|[0-9])*(\})[^\`]*\`
-COMMENT       \/\*[\w\'\s\r\n\*]*\/
-%%
+STRING1       \"[^\"\n]*\"
+STRING2       \`((\$\{)([_]|[a-zA-Z])*([_]|[a-zA-Z]|[0-9])*(\})|[^\`]+)[^\`]*\`
+COMMENT       (\/\*)([^\n])*(\*\/)
 
+%%
 
 "class" { return (tk_class); }
 "abstract" { return (tk_abstract); }
@@ -47,23 +45,19 @@ COMMENT       \/\*[\w\'\s\r\n\*]*\/
 "string" { return (tk_string); }
 "boolean" { return (tk_boolean); }
 
-"+"|"-"|"*"|"/" { return (yytext[0]); }
-"="|"<"|">" { return (yytext[0]); }
-">=" { return (tk_greater_than); }
-"<=" { return (tk_minor_than); }
-"==" { return (tk_compare); }
-"!=" { return (tk_different); }
-"and" { return (tk_and); }
-"or" { return (tk_or); }
-"not" { return (tk_not); }
+"+"|"-"|"*"|"/"|"=" { return (yytext[0]); }
+"\""|"`" { return (yytext[0]); }
+"<"|">"|">="|"<="|"=="|"!=" { return (tk_logic_op); }
+"and"|"or"|"not" { return (tk_logic_op); }
 "+=" { return (tk_plus_op); }
 "-=" { return (tk_rest_op); }
-"{"|"}"|";"|"("|")"|"["|"]"|":"|"," { return (yytext[0]); }
+"{"|"}"|";"|"("|")" { return (yytext[0]); }
+"["|"]"|":"|"," { return (yytext[0]); }
 "true" { return (tk_true); }
 "false" { return (tk_false); }
 
 -?{DIGIT}+ { return (tk_int_val); }
--?{DIGIT}+"."{DIGIT}* { return (tk_real_val); }
+-?{DIGIT}+"."{DIGIT}+ { return (tk_real_val); }
 
 {STRING1} { return (tk_str_1); }
 {STRING2} { return (tk_str_2); }
@@ -72,11 +66,10 @@ COMMENT       \/\*[\w\'\s\r\n\*]*\/
 
 {COMMENT} { return (tk_comment); }
 
-[ \t\n]+  /* Se come los espacios en blanco */
+[ \t\n]+  /* Clean whitespace, tabs and breakpoints */
 
 . { 
-  printf("[Lexical error: (%s), in line (%d)]\n", yytext, yylineno);
-  errorCount = errorCount + 1;
+  printf("[Lexical error: '%s', in line (%d)]\n", yytext, yylineno);
 }
 
 %%

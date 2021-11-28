@@ -79,22 +79,16 @@ extern int yydebug;
     tk_double = 280,               /* tk_double  */
     tk_string = 281,               /* tk_string  */
     tk_boolean = 282,              /* tk_boolean  */
-    tk_greater_than = 283,         /* tk_greater_than  */
-    tk_minor_than = 284,           /* tk_minor_than  */
-    tk_compare = 285,              /* tk_compare  */
-    tk_different = 286,            /* tk_different  */
-    tk_and = 287,                  /* tk_and  */
-    tk_or = 288,                   /* tk_or  */
-    tk_not = 289,                  /* tk_not  */
-    tk_plus_op = 290,              /* tk_plus_op  */
-    tk_rest_op = 291,              /* tk_rest_op  */
-    tk_true = 292,                 /* tk_true  */
-    tk_false = 293,                /* tk_false  */
-    tk_int_val = 294,              /* tk_int_val  */
-    tk_real_val = 295,             /* tk_real_val  */
-    tk_str_1 = 296,                /* tk_str_1  */
-    tk_str_2 = 297,                /* tk_str_2  */
-    tk_comment = 298               /* tk_comment  */
+    tk_logic_op = 283,             /* tk_logic_op  */
+    tk_plus_op = 284,              /* tk_plus_op  */
+    tk_rest_op = 285,              /* tk_rest_op  */
+    tk_true = 286,                 /* tk_true  */
+    tk_false = 287,                /* tk_false  */
+    tk_int_val = 288,              /* tk_int_val  */
+    tk_real_val = 289,             /* tk_real_val  */
+    tk_str_1 = 290,                /* tk_str_1  */
+    tk_str_2 = 291,                /* tk_str_2  */
+    tk_comment = 292               /* tk_comment  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
