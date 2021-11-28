@@ -3,16 +3,17 @@ public class MyClass {
   var variableB: integer = 2;
   var variableC: integer = 10;
   var age: integer = 20;
+  var name: string = read("Enter your name: ");
 
-  method helloWorld(name: string): void {
-    var value: integer = 1;
-    print(`${name} ${value}`);
-    print(name);
+  method firstTest(name: string, value: integer): void {
+    print(`${name}: ${value}`);
   }
 
   method sum(): void {
+    variableA += 1;
     print(variableA + variableB);
   }
+
   method subtract(): void {
     print(variableA - variableB);
   }
@@ -29,11 +30,27 @@ public class MyClass {
     }
     return false;
   }
+
   method validateAge(): string {
     if (age >= 20) {
       return "I'm 20 or older than 20 years old.";
     } else {
       return "I'm under 20 years old.";
+    }
+  }
+
+  method validateOption(): void {
+    var number: integer = 10;
+    switch (number) {
+      case 1:
+        print("First case: ${number}");
+        break;
+      case 2:
+        print("Second case: ${number}");
+        break;
+      default:
+        print("Default case: ${number}");
+        break;
     }
   }
 

@@ -46,12 +46,11 @@ void yyerror(char *s);
 %token tk_comment
 %start program
 
-/* TODO: Add SWITCH CASE */
 %%
 
 program : class '{' declaration_group instruction_group '}' { printf("=> Correct program syntax\n"); }
         ;
-class   : access tk_class id 
+class   : access instance tk_class id 
         ;
 declaration_group : /* Empty */
         | declaration declaration_group
@@ -63,11 +62,15 @@ declaration : var_declaration
 var_declaration : tk_var id_list ';'
         | tk_var id_type '=' expression ';'
         ;
-method_declaration : access tk_method id '(' param_list ')' ':' method_type '{' declaration_group instruction_group '}'
+method_declaration : access instance tk_method id '(' param_list ')' ':' method_type '{' declaration_group instruction_group '}'
         ;
 access  : /* Empty */
         | tk_public
         | tk_private
+        ;
+instance : /* Empty */
+        | tk_static
+        | tk_abstract
         ;
 param_list : 
         | id_list
@@ -89,15 +92,24 @@ instruction : assignment_instruction
         | plus_rest_instruction
         ;
 assignment_instruction : id '=' expression ';'
+        | id tk_plus_op tk_int_val ';'
+        | id tk_rest_op tk_int_val ';'
         ;
 comparison_instruction : if_statement
-        | if_statement tk_else '{' instruction_group '}'
+        | if_statement tk_else '{' declaration_group instruction_group '}'
+        | switch_statement
         ;
-if_statement : tk_if '(' expression ')' '{' instruction_group '}'
+if_statement : tk_if '(' expression ')' '{' declaration_group instruction_group '}'
         ;
-loop_instruction : while_statement '{' instruction_group '}'
-        | tk_do '{' instruction_group '}' while_statement ';'
-        | tk_for '(' for_var_declaration ';' expression ';' plus_rest_instruction ')' '{' instruction_group '}'
+switch_statement : tk_switch '(' expression ')' '{' switch_instructions '}' /* TODO: Fix switch statement */
+        ;
+switch_instructions : tk_case expression ':' declaration_group instruction_group tk_break ';'
+        | tk_default ':' declaration_group instruction_group tk_break ';'
+        | switch_instructions tk_default ':' declaration_group instruction_group tk_break ';'
+        ;
+loop_instruction : while_statement '{' declaration_group instruction_group '}'
+        | tk_do '{' declaration_group instruction_group '}' while_statement ';'
+        | tk_for '(' for_var_declaration ';' expression ';' plus_rest_instruction ')' '{' declaration_group instruction_group '}'
         ;
 while_statement : tk_while '(' expression ')'
         ;
@@ -137,12 +149,18 @@ term    : id
         | tk_real_val
         | tk_str_1
         | tk_str_2
+        | tk_break
         | '(' expression ')'
+        | tk_read '(' read_params ')'
         | compare
         ;
 arg_list : 
         | id
         | arg_list ',' id
+        ;
+read_params : /* Empty */
+        | tk_str_1
+        | tk_str_2
         ;
 compare : expression tk_logic_op expression
         ;
