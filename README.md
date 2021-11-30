@@ -10,4 +10,4 @@
 1. `cd src && flex -o ../compilation/jacaf-lexical.c jacaf-lexical.l`
 1. `bison -d -o ../compilation/jacaf-syntactical.tab.c jacaf-syntactical.y`
 1. `cd .. && cd compilation && gcc *.c -o ../dist/jacaf`
-1. `cd .. && cd dist && ./jacaf`
+1. `cd .. && cd dist && ./jacaf ../test/example.jacaf`

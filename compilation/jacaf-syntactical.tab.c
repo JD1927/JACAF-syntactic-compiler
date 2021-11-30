@@ -1518,9 +1518,14 @@ yyreturn:
 #line 175 "jacaf-syntactical.y"
 
 
-int main() {
+int main(int argc, char **argv) {
   printf("[START]: JACAF Syntax code analysis \n\n");
-  yyin = fopen("../test/example.jacaf", "r");
+  ++argv, --argc;
+  if (argc > 0) {
+    yyin = fopen(argv[0], "r");
+  } else {
+    yyin = stdin;
+  }
   if (!yyin) { printf("Something went wrong reading the file."); }
   yyparse();
   printf("[Analyzed lines (%d)]\n\n", yylineno);
