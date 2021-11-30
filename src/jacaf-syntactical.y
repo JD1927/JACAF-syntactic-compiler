@@ -48,7 +48,7 @@ void yyerror(char *s);
 
 %%
 
-program : class '{' declaration_group instruction_group '}' { printf("=> Correct program syntax\n"); }
+program : class '{' declaration_group instruction_group '}' { printf("=> [JACAF Program]: Correct syntax.\n"); }
         ;
 class   : access instance tk_class id 
         ;
@@ -99,13 +99,20 @@ comparison_instruction : if_statement
         | if_statement tk_else '{' declaration_group instruction_group '}'
         | switch_statement
         ;
-if_statement : tk_if '(' expression ')' '{' declaration_group instruction_group '}'
+if_statement : tk_if '(' expression ')' '{' declaration_group instruction_group '}' ;
+switch_statement : tk_switch '(' expression ')' '{' switch_instructions '}' ;
+switch_instructions : cases ;
+cases   : case
+        | tk_case case_expression ':' cases
+        | case_default
+        | case ';' cases
         ;
-switch_statement : tk_switch '(' expression ')' '{' switch_instructions '}' /* TODO: Fix switch statement */
-        ;
-switch_instructions : tk_case expression ':' declaration_group instruction_group tk_break ';'
-        | tk_default ':' declaration_group instruction_group tk_break ';'
-        | switch_instructions tk_default ':' declaration_group instruction_group tk_break ';'
+case    : tk_case case_expression ':' declaration_group instruction_group tk_break ;
+case_default : tk_default ':' declaration_group instruction_group tk_break ';' ;
+case_expression : tk_int_val
+        | tk_real_val
+        | tk_str_1
+        | tk_str_2
         ;
 loop_instruction : while_statement '{' declaration_group instruction_group '}'
         | tk_do '{' declaration_group instruction_group '}' while_statement ';'

@@ -46,7 +46,11 @@ public class MyClass {
         print("First case: ${number}");
         break;
       case 2:
-        print("Second case: ${number}");
+      case 3:
+      case 4:
+        var hello: string = "I'm in a switch statement.";
+        print("Second, third and fourth case: ${number}");
+        print(hello);
         break;
       default:
         print("Default case: ${number}");
@@ -55,7 +59,7 @@ public class MyClass {
   }
 
   method loops(): void {
-    for (var i: integer = 0; i < variableC; i+=1) {
+    for (var i: integer = 0; i <= variableC; i+=10) {
       print(`Index value: ${i}`);
     }
 
@@ -65,6 +69,6 @@ public class MyClass {
 
     do {
       print(`variableC value: ${variableC}`);
-    } while(variableC >= 11);
+    } while(variableC != 11);
   }
 }
