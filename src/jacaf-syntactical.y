@@ -48,8 +48,7 @@ void yyerror(char *s);
 
 %%
 
-program : class '{' declaration_group instruction_group '}' { printf("=> [JACAF Program]: Correct syntax.\n"); }
-        ;
+program : class '{' declaration_group instruction_group '}' ;
 class   : access instance tk_class id 
         ;
 declaration_group : /* Empty */
@@ -98,6 +97,7 @@ assignment_instruction : id '=' expression ';'
 comparison_instruction : if_statement
         | if_statement tk_else '{' declaration_group instruction_group '}'
         | switch_statement
+        | comparison_instruction error '}' {yyerrok;}
         ;
 if_statement : tk_if '(' expression ')' '{' declaration_group instruction_group '}' ;
 switch_statement : tk_switch '(' expression ')' '{' switch_instructions '}' ;
@@ -106,6 +106,7 @@ cases   : case
         | tk_case case_expression ':' cases
         | case_default
         | case ';' cases
+        | cases error ';' {yyerrok;}
         ;
 case    : tk_case case_expression ':' declaration_group instruction_group tk_break ;
 case_default : tk_default ':' declaration_group instruction_group tk_break ';' ;
@@ -117,6 +118,7 @@ case_expression : tk_int_val
 loop_instruction : while_statement '{' declaration_group instruction_group '}'
         | tk_do '{' declaration_group instruction_group '}' while_statement ';'
         | tk_for '(' for_var_declaration ';' expression ';' plus_rest_instruction ')' '{' declaration_group instruction_group '}'
+        | loop_instruction error '}' {yyerrok;}
         ;
 while_statement : tk_while '(' expression ')'
         ;

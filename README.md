@@ -7,6 +7,11 @@
 
 ## Compilador Sintáctico JACAF
 
+### Recomendaciones
+
+- Usar una distribución de linux del proyecto, preferiblemente Ubuntu
+- Instalar las herramientas CASE de Flex y Bison
+
 ### Archivos importantes
 
 #### Carpetas
@@ -24,3 +29,10 @@ Una vez descargado el repositorio y estando en la carpeta `~/JACAF-syntactic-com
 1. `bison -d -o ../compilation/jacaf-syntactical.tab.c jacaf-syntactical.y`
 1. `cd .. && cd compilation && gcc *.c -o ../dist/jacaf`
 1. `cd .. && cd dist && ./jacaf ../test/example.jacaf`
+
+---
+
+Se puede hacer uso de los siguientes archivos de la carpeta `test` para ser compilados:
+
+- `example.jacaf`
+- `example2.jacaf`

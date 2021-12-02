@@ -1,0 +1,29 @@
+public class MyClass {
+  var candidates: integer, code: integer;
+  var name: string;
+  var grades: double;
+  var candidateCode: integer = 0;
+  var candidateName: string = ``;
+  var candidateGrades: double = 0;
+
+  method main(): void {
+    candidates = read("Number of candidates: ");
+    for (var i: integer = 0; i < candidates; i+=1) {
+      code = read("Student code: ");
+      name = read("Student name: ");
+      grades = read("Student grades: ");
+      
+      if (grades > 4.0 and grades > candidateGrades) {
+        candidateCode = code;
+        candidateName = name;
+        candidateGrades = grades;
+      }
+    }
+    if (candidateCode == 0) {
+      print("It's a shame");
+    } else {
+      print("${candidateCode} ${candidateName}");
+    }
+  }
+
+}
