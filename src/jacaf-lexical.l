@@ -64,9 +64,7 @@ COMMENT       (\/\*)([^\n])*(\*\/)
 
 {ID} { return (id); }
 
-{COMMENT} { return (tk_comment); }
-
-[ \t\n]+  /* Clean whitespace, tabs and breakpoints */
+{COMMENT}|[ \t\n]+  /* Clean whitespace, tabs and breakpoints */
 
 . { 
   printf("[Lexical error: '%s', in line (%d)]\n", yytext, yylineno);

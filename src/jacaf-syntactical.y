@@ -43,7 +43,6 @@ void yyerror(char *s);
 %token tk_real_val
 %token tk_str_1
 %token tk_str_2
-%token tk_comment
 %start program
 
 %%
@@ -99,17 +98,20 @@ comparison_instruction : if_statement
         | switch_statement
         | comparison_instruction error '}' {yyerrok;}
         ;
-if_statement : tk_if '(' expression ')' '{' declaration_group instruction_group '}' ;
-switch_statement : tk_switch '(' expression ')' '{' switch_instructions '}' ;
-switch_instructions : cases ;
+if_statement : tk_if '(' expression ')' '{' declaration_group instruction_group '}' 
+        ;
+switch_statement : tk_switch '(' expression ')' '{' cases '}' 
+        ;
 cases   : case
         | tk_case case_expression ':' cases
         | case_default
         | case ';' cases
         | cases error ';' {yyerrok;}
         ;
-case    : tk_case case_expression ':' declaration_group instruction_group tk_break ;
-case_default : tk_default ':' declaration_group instruction_group tk_break ';' ;
+case    : tk_case case_expression ':' declaration_group instruction_group tk_break 
+        ;
+case_default : tk_default ':' declaration_group instruction_group tk_break ';' 
+        ;
 case_expression : tk_int_val
         | tk_real_val
         | tk_str_1

@@ -374,8 +374,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 43
-#define YY_END_OF_BUFFER 44
+#define YY_NUM_RULES 42
+#define YY_END_OF_BUFFER 43
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -385,10 +385,10 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[166] =
     {   0,
-        0,    0,   44,   42,   41,   41,   42,   26,   31,   25,
+        0,    0,   43,   41,   40,   40,   41,   26,   31,   25,
        25,   32,   25,   25,   35,   27,   25,   27,   39,   26,
        39,   39,   39,   39,   39,   39,   39,   39,   39,   39,
-       39,   39,   39,   39,   39,   39,   41,   27,    0,   37,
+       39,   39,   39,   39,   39,   39,   40,   27,    0,   37,
        29,   35,   30,    0,    0,   39,   39,    0,    0,   38,
        39,   39,   39,   39,   39,   39,   39,   19,   39,   39,
        39,   14,   39,   39,   39,   28,   39,   39,   39,   39,
@@ -605,11 +605,11 @@ static const flex_int16_t yy_chk[491] =
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static const flex_int32_t yy_rule_can_match_eol[44] =
+static const flex_int32_t yy_rule_can_match_eol[43] =
     {   0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 
-    0, 1, 0, 0,     };
+    1, 0, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -1117,29 +1117,24 @@ YY_RULE_SETUP
 { return (id); }
 	YY_BREAK
 case 40:
+/* rule 40 can match eol */
 YY_RULE_SETUP
 #line 67 "jacaf-lexical.l"
-{ return (tk_comment); }
-	YY_BREAK
-case 41:
-/* rule 41 can match eol */
-YY_RULE_SETUP
-#line 69 "jacaf-lexical.l"
 /* Clean whitespace, tabs and breakpoints */
 	YY_BREAK
-case 42:
+case 41:
 YY_RULE_SETUP
-#line 71 "jacaf-lexical.l"
+#line 69 "jacaf-lexical.l"
 { 
   printf("[Lexical error: '%s', in line (%d)]\n", yytext, yylineno);
 }
 	YY_BREAK
-case 43:
+case 42:
 YY_RULE_SETUP
-#line 75 "jacaf-lexical.l"
+#line 73 "jacaf-lexical.l"
 ECHO;
 	YY_BREAK
-#line 1142 "../compilation/jacaf-lexical.c"
+#line 1137 "../compilation/jacaf-lexical.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2156,5 +2151,5 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 75 "jacaf-lexical.l"
+#line 73 "jacaf-lexical.l"
 

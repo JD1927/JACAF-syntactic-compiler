@@ -87,8 +87,7 @@ extern int yydebug;
     tk_int_val = 288,              /* tk_int_val  */
     tk_real_val = 289,             /* tk_real_val  */
     tk_str_1 = 290,                /* tk_str_1  */
-    tk_str_2 = 291,                /* tk_str_2  */
-    tk_comment = 292               /* tk_comment  */
+    tk_str_2 = 291                 /* tk_str_2  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif

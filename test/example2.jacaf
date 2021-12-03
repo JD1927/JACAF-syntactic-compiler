@@ -4,8 +4,10 @@ public class MyClass {
   var grades: double;
   var candidateCode: integer = 0;
   var candidateName: string = ``;
+  var candidateName2: string = "Juan@Aguirre$~~*¨^'";
   var candidateGrades: double = 0;
 
+  /* This is the main function */
   method main(): void {
     candidates = read("Number of candidates: ");
     for (var i: integer = 0; i < candidates; i+=1) {
